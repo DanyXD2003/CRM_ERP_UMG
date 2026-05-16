@@ -1,0 +1,39 @@
+@model List<Venta>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Ventas</h2>
+    <a class="btn btn-primary" asp-action="Crear">Nueva venta</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>No.</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Usuario</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var venta in Model)
+        {
+            <tr>
+                <td>@venta.NumeroVenta</td>
+                <td>@venta.FechaVenta.ToLocalTime()</td>
+                <td>@(venta.Cliente?.Nombre ?? "Consumidor Final")</td>
+                <td>@venta.Usuario?.Email</td>
+                <td>Q @venta.Total</td>
+                <td>@venta.Estado</td>
+                <td>
+                    <a class="btn btn-sm btn-success" asp-action="Detalle" asp-route-id="@venta.Id">
+                        Ver
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

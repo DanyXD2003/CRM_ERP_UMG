@@ -1,0 +1,114 @@
+@model ModuloDinamico
+
+<h2>@Model.NombreModulo</h2>
+<p class="text-muted">@Model.Descripcion</p>
+
+@if (TempData["Ok"] != null)
+{
+    <div class="alert alert-success">@TempData["Ok"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="mb-3">
+    <a class="btn btn-success" asp-controller="Registros" asp-action="Index" asp-route-moduloId="@Model.Id">Ver registros</a>
+    <a class="btn btn-dark" asp-controller="Operaciones" asp-action="Crear" asp-route-moduloId="@Model.Id">Crear operación</a>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        Campos del módulo
+    </div>
+
+    <div class="card-body">
+        @if (!Model.EsquemaCampos.Any())
+        {
+            <div class="alert alert-warning">Este módulo todavía no tiene campos.</div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre interno</th>
+                        <th>Etiqueta</th>
+                        <th>Tipo</th>
+                        <th>Requerido</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var campo in Model.EsquemaCampos)
+                    {
+                        <tr>
+                            <td><code>@campo.Key</code></td>
+                            <td>@campo.Value.Etiqueta</td>
+                            <td>@campo.Value.TipoCampo</td>
+                            <td>@(campo.Value.Requerido ? "Sí" : "No")</td>
+                            <td>
+                                @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                                {
+                                    <form asp-action="EliminarCampo" method="post" onsubmit="return confirm('¿Eliminar este campo?');">
+                                        <input type="hidden" name="moduloId" value="@Model.Id" />
+                                        <input type="hidden" name="nombreCampo" value="@campo.Key" />
+                                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+{
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            Agregar nuevo campo
+        </div>
+
+        <div class="card-body">
+            <form asp-action="AgregarCampo" method="post">
+                <input type="hidden" name="moduloId" value="@Model.Id" />
+
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Nombre interno</label>
+                        <input name="nombreCampo" class="form-control" placeholder="precio_unitario" required />
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Etiqueta visible</label>
+                        <input name="etiqueta" class="form-control" placeholder="Precio Unitario" required />
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Tipo</label>
+                        <select name="tipoCampo" class="form-select">
+                            <option value="texto">Texto</option>
+                            <option value="numero">Número</option>
+                            <option value="fecha">Fecha</option>
+                            <option value="booleano">Sí / No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Requerido</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="requerido" value="true" />
+                            <label class="form-check-label">Sí</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" type="submit">Agregar campo</button>
+            </form>
+        </div>
+    </div>
+}

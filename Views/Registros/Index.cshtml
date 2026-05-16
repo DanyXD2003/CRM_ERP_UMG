@@ -1,0 +1,56 @@
+@model List<RegistroDinamico>
+@{
+    var modulo = (ModuloDinamico)ViewBag.Modulo;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Registros: @modulo.NombreModulo</h2>
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+    {
+        <a class="btn btn-primary" asp-action="Crear" asp-route-moduloId="@modulo.Id">Nuevo registro</a>
+    }
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    @foreach (var campo in modulo.EsquemaCampos)
+                    {
+                        <th>@campo.Value.Etiqueta</th>
+                    }
+                    <th>Fecha</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var registro in Model)
+                {
+                    <tr>
+                        @foreach (var campo in modulo.EsquemaCampos)
+                        {
+                            <td>@(registro.Datos.ContainsKey(campo.Key) ? registro.Datos[campo.Key] : "")</td>
+                        }
+
+                        <td>@registro.FechaCreacion.ToLocalTime()</td>
+
+                        <td>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                            {
+                                <a class="btn btn-sm btn-warning" asp-action="Editar" asp-route-id="@registro.Id">Editar</a>
+
+                                <form asp-action="Eliminar" method="post" class="d-inline" onsubmit="return confirm('¿Eliminar registro?');">
+                                    <input type="hidden" name="id" value="@registro.Id" />
+                                    <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+@model List<Dictionary<string, object>>
+
+@{
+    var operacion = (OperacionDinamica)ViewBag.Operacion;
+}
+
+<h2>@operacion.NombreOperacion</h2>
+
+<p class="text-muted">
+    Módulo: @operacion.Modulo?.NombreModulo
+</p>
+
+<div class="card shadow-sm">
+    <div class="card-body table-responsive">
+        @if (!Model.Any())
+        {
+            <div class="alert alert-warning">
+                No hay registros para procesar en este módulo.
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        @foreach (var columna in operacion.ColumnasVisibles)
+                        {
+                            <th>@columna</th>
+                        }
+
+                        @foreach (var formula in operacion.Formulas)
+                        {
+                            <th class="text-warning">@formula.NombreResultado</th>
+                        }
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var fila in Model)
+                    {
+                        <tr>
+                            @foreach (var columna in operacion.ColumnasVisibles)
+                            {
+                                <td>@fila[columna]</td>
+                            }
+
+                            @foreach (var formula in operacion.Formulas)
+                            {
+                                <td class="fw-bold">@fila[formula.NombreResultado]</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+<hr />
+
+<h5>Fórmulas usadas</h5>
+
+<ul>
+    @foreach (var formula in operacion.Formulas)
+    {
+        <li>
+            <code>@formula.NombreResultado = @formula.Expresion</code>
+        </li>
+    }
+</ul>
+
+<a class="btn btn-secondary"
+   asp-action="Index"
+   asp-route-moduloId="@operacion.ModuloDinamicoId">
+    Volver a operaciones
+</a>

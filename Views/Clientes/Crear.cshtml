@@ -1,0 +1,28 @@
+@model Cliente
+
+<h2>Nuevo cliente</h2>
+
+<form asp-action="Crear" method="post" class="card shadow-sm p-4">
+    <div class="mb-3">
+        <label class="form-label">NIT</label>
+        <input asp-for="Nit" class="form-control" value="CF" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Teléfono</label>
+        <input asp-for="Telefono" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Dirección</label>
+        <input asp-for="Direccion" class="form-control" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Guardar</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+</form>

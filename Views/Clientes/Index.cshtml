@@ -1,0 +1,29 @@
+@model List<Cliente>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Clientes</h2>
+    <a class="btn btn-primary" asp-action="Crear">Nuevo cliente</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>NIT</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var cliente in Model)
+        {
+            <tr>
+                <td>@cliente.Nit</td>
+                <td>@cliente.Nombre</td>
+                <td>@cliente.Telefono</td>
+                <td>@cliente.Direccion</td>
+            </tr>
+        }
+    </tbody>
+</table>

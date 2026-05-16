@@ -1,0 +1,40 @@
+@model LoginVista
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">Ingreso al sistema</h4>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Login" method="post">
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Correo</label>
+                        <input asp-for="Email" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Contraseña</label>
+                        <input asp-for="Password" class="form-control" />
+                    </div>
+
+                    <button class="btn btn-primary w-100" type="submit">Ingresar</button>
+                </form>
+
+                <hr />
+
+                <div class="small text-muted">
+                    Usuario inicial:<br />
+                    <strong>admin@umg.com</strong><br />
+                    Contraseña:<br />
+                    <strong>Admin123*</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

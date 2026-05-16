@@ -1,0 +1,33 @@
+@model Producto
+
+<h2>Nuevo producto</h2>
+
+<form asp-action="Crear" method="post" class="card shadow-sm p-4">
+    <div class="mb-3">
+        <label class="form-label">Código</label>
+        <input asp-for="Codigo" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Precio de venta</label>
+        <input asp-for="PrecioVenta" type="number" step="any" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Existencia</label>
+        <input asp-for="Existencia" type="number" step="any" class="form-control" required />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Guardar</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+</form>

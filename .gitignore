@@ -1,0 +1,44 @@
+# Build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+.vs/
+
+# Publish output
+publish/
+out/
+
+# NuGet
+*.nupkg
+.nuget/
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+*.db
+*.sqlite
+
+# Environment / secrets
+appsettings.Development.json
+appsettings.Production.json
+secrets.json
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Rider / JetBrains
+.idea/
+
+# VS Code
+.vscode/
+
+# Temporary files
+*.tmp
+*.swp

@@ -1,0 +1,99 @@
+@{
+    var clientes = (List<Cliente>)ViewBag.Clientes;
+    var productos = (List<Producto>)ViewBag.Productos;
+}
+
+<h2>Nueva venta</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="Crear" method="post" class="card shadow-sm p-4">
+    <div class="mb-3">
+        <label class="form-label">Cliente</label>
+        <select name="clienteId" class="form-select">
+            <option value="">Consumidor Final</option>
+
+            @foreach (var cliente in clientes)
+            {
+                <option value="@cliente.Id">@cliente.Nit - @cliente.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <hr />
+
+    <h5>Productos</h5>
+
+    @if (!productos.Any())
+    {
+        <div class="alert alert-warning">
+            No hay productos disponibles con existencia.
+        </div>
+    }
+    else
+    {
+        <div id="lineasVenta">
+            <div class="row mb-2 linea-venta">
+                <div class="col-md-8">
+                    <select name="productoId" class="form-select" required>
+                        @foreach (var producto in productos)
+                        {
+                            <option value="@producto.Id">
+                                @producto.Codigo - @producto.Nombre - Q @producto.PrecioVenta - Stock: @producto.Existencia
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <input name="cantidad" type="number" step="any" min="0.01" class="form-control" placeholder="Cantidad" required />
+                </div>
+
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" onclick="eliminarLinea(this)">X</button>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-outline-secondary btn-sm mb-3" onclick="agregarLinea()">
+            Agregar producto
+        </button>
+
+        <div class="mb-3">
+            <label class="form-label">Descuento</label>
+            <input name="descuento" type="number" step="any" value="0" class="form-control" />
+        </div>
+
+        <button class="btn btn-primary" type="submit">Guardar venta</button>
+    }
+
+    <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+</form>
+
+@section Scripts {
+    <script>
+        function agregarLinea() {
+            const contenedor = document.getElementById("lineasVenta");
+            const primeraLinea = document.querySelector(".linea-venta");
+            const nuevaLinea = primeraLinea.cloneNode(true);
+
+            nuevaLinea.querySelector("input[name='cantidad']").value = "";
+
+            contenedor.appendChild(nuevaLinea);
+        }
+
+        function eliminarLinea(boton) {
+            const lineas = document.querySelectorAll(".linea-venta");
+
+            if (lineas.length <= 1) {
+                alert("Debe quedar al menos un producto.");
+                return;
+            }
+
+            boton.closest(".linea-venta").remove();
+        }
+    </script>
+}

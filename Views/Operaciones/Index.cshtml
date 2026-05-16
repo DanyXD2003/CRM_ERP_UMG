@@ -1,0 +1,81 @@
+@model List<OperacionDinamica>
+
+<h2>Operaciones</h2>
+
+@if (TempData["Ok"] != null)
+{
+    <div class="alert alert-success">@TempData["Ok"]</div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="card shadow-sm">
+    <div class="card-body table-responsive">
+        @if (!Model.Any())
+        {
+            <div class="alert alert-warning">
+                No hay operaciones registradas todavía.
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Operación</th>
+                        <th>Módulo</th>
+                        <th>Fórmulas</th>
+                        <th>Fecha</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var operacion in Model)
+                    {
+                        <tr>
+                            <td>@operacion.NombreOperacion</td>
+                            <td>@operacion.Modulo?.NombreModulo</td>
+                            <td>
+                                @foreach (var formula in operacion.Formulas)
+                                {
+                                    <div>
+                                        <code>@formula.NombreResultado = @formula.Expresion</code>
+                                    </div>
+                                }
+                            </td>
+                            <td>@operacion.FechaCreacion.ToLocalTime()</td>
+                            <td>
+                                <a class="btn btn-sm btn-success"
+                                   asp-action="Resultado"
+                                   asp-route-id="@operacion.Id">
+                                    Ver resultado
+                                </a>
+
+                                @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                                {
+                                    <form asp-action="Eliminar"
+                                          method="post"
+                                          class="d-inline"
+                                          onsubmit="return confirm('¿Eliminar operación?');">
+                                        <input type="hidden" name="id" value="@operacion.Id" />
+                                        <button class="btn btn-sm btn-danger" type="submit">
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+<a class="btn btn-secondary mt-3" asp-controller="Modulos" asp-action="Index">
+    Volver a módulos
+</a>

@@ -1,0 +1,47 @@
+@{
+    var modulo = (ModuloDinamico)ViewBag.Modulo;
+}
+
+@functions {
+    string TipoInput(string tipo)
+    {
+        return tipo switch
+        {
+            "numero" => "number",
+            "fecha" => "date",
+            _ => "text"
+        };
+    }
+}
+
+<h2>Nuevo registro: @modulo.NombreModulo</h2>
+
+<form asp-action="Crear" method="post" class="card shadow-sm p-4">
+    <input type="hidden" name="moduloId" value="@modulo.Id" />
+
+    @foreach (var campo in modulo.EsquemaCampos)
+    {
+        <div class="mb-3">
+            <label class="form-label">@campo.Value.Etiqueta</label>
+
+            @if (campo.Value.TipoCampo == "booleano")
+            {
+                <select name="@campo.Key" class="form-select">
+                    <option value="No">No</option>
+                    <option value="Sí">Sí</option>
+                </select>
+            }
+            else
+            {
+                <input name="@campo.Key"
+                       type="@TipoInput(campo.Value.TipoCampo)"
+                       step="any"
+                       class="form-control"
+                       required="@campo.Value.Requerido" />
+            }
+        </div>
+    }
+
+    <button class="btn btn-primary" type="submit">Guardar registro</button>
+    <a class="btn btn-secondary" asp-action="Index" asp-route-moduloId="@modulo.Id">Cancelar</a>
+</form>

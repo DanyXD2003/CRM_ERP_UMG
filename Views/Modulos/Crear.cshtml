@@ -1,0 +1,18 @@
+@model ModuloDinamico
+
+<h2>Crear módulo</h2>
+
+<form asp-action="Crear" method="post" class="card shadow-sm p-4">
+    <div class="mb-3">
+        <label asp-for="NombreModulo" class="form-label">Nombre del módulo</label>
+        <input asp-for="NombreModulo" class="form-control" placeholder="Ejemplo: Ventas, Clientes, Inventario" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Descripcion" class="form-label">Descripción</label>
+        <textarea asp-for="Descripcion" class="form-control"></textarea>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Guardar</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+</form>
